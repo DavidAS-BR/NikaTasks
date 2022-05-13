@@ -22,7 +22,12 @@ jobs:
 
     # Sequencia de tarefas a serem executadas
     steps:
-      - uses: kanadgupta/glitch-sync@v1.1
+      - name: Glitch-Deploy
+        uses: kanadgupta/glitch-sync@v1.1
+        with:
+          project-id: '${{ secrets.projectId }}'
+          auth-token: '${{ secrets.authToken }}'
+          #path: 'dist' # optional
 
       # Runs a single command using the runners shell
       - name: Glitch-Deploy
