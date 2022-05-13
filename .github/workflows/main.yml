@@ -22,12 +22,18 @@ jobs:
 
     # Sequencia de tarefas a serem executadas
     steps:
+    
+      - name: Create-Folder
+        run: |
+          mkdir teste,
+          touch teste/testando.txt
+          
       - name: Glitch-Deploy
         uses: kanadgupta/glitch-sync@v1.1
         with:
           project-id: '${{ secrets.projectId }}'
           auth-token: '${{ secrets.authToken }}'
-          #path: 'dist' # optional
+          path: 'teste' # optional
 
       # Runs a single command using the runners shell
       - name: Glitch-Deploy
