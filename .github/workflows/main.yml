@@ -32,7 +32,7 @@ jobs:
         with:
           project-id: '${{ secrets.projectId }}'
           auth-token: '${{ secrets.authToken }}'
-          path: 'teste' # optional
+          #path: 'teste' # optional
 
       # Runs a single command using the runners shell
       - name: Glitch-Deploy
