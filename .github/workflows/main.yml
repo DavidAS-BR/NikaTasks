@@ -25,8 +25,7 @@ jobs:
     
       - name: Create-Folder
         run: |
-          mkdir teste,
-          touch teste/testando.txt
+          mkdir teste && touch teste/testando.txt
           
       - name: Glitch-Deploy
         uses: kanadgupta/glitch-sync@v1.1
