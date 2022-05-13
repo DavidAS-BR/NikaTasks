@@ -1,0 +1,17 @@
+{
+    "productName": "NikaTasks",
+    "servletContainer": {
+        "id": "tomcat9",
+        "version": "9.0.52",
+        "description": "Tomcat 9.0.52"
+    },
+    "serverConfig": {
+        "httpPort": 8080
+    },
+    "webApps": [
+        {
+            "contextPath": "/NikaTasks",
+            "resourceBase": "webapps/NikaTasks-1.0-SNAPSHOT.war"
+        }
+    ]
+}
