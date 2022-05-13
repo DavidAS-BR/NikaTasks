@@ -1,0 +1,40 @@
+plugins {
+    id 'war'
+    id "org.gretty" version "3.0.7"
+}
+
+group 'glitch.me.nikatasks'
+version '1.0-SNAPSHOT'
+
+gretty{
+    servletContainer = 'tomcat9'
+    httpPort = project.hasProperty("httpPort") ? project.httpPort as int : 8080
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+}
+
+task finalJar(type: Jar) {
+    archiveClassifier.set("all")
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'glitch.me.nikatasks.NikaTasks'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    from {
+        sourceSets.main.getOutput()
+    }
+
+    with jar
+}
