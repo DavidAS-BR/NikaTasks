@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: build
-        run: mkdir testando && touch testando/teste.txt && echo ".git" >> .clear-target-files
+        run: mkdir testando && touch testando/testando.txt && echo ".git" >> .clear-target-files
         
       - name: Push
         uses: s0/git-publish-subdir-action@develop
@@ -36,7 +36,7 @@ jobs:
           FOLDER: testando # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           CLEAR_GLOBS_FILE: ".clear-target-files"
-          MESSAGE: "Build: ({sha}) {msg}" # The commit message
+          MESSAGE: "Build: ({sha}) {msg} [ci-skip]" # The commit message
           
       - name: Glitch-Deploy
         uses: kanadgupta/glitch-sync@v1.1
