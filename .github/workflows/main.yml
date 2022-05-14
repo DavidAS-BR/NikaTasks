@@ -43,7 +43,7 @@ jobs:
         env:
           REPO: self
           BRANCH: main # The branch name where you want to push the assets
-          FOLDER: webppbuild # The directory where your assets are generated
+          FOLDER: webappbuild # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           CLEAR_GLOBS_FILE: ".clear-target-files"
           MESSAGE: "Build: ({sha}) {msg} [ci-skip]" # The commit message
