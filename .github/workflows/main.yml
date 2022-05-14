@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew buildAllProducts
         
       - name: Montar Pastas
-        run: mkdir webppbuild && mv build webappbuild && echo "build" >> .clear-target-files
+        run: mkdir webppbuild && mv build webappbuild && echo ".ignoreabc" >> .clear-target-files
         
       - name: Push
         uses: s0/git-publish-subdir-action@develop
