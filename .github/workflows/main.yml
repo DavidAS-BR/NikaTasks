@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2
       
       - name: build
-        run: mkdir testando && mkdir testebuild && touch testando/testebuild/testando.txt && echo ".git" >> .clear-target-files
+        run: mkdir testando && mkdir testando/testebuild && touch testando/testebuild/testando.txt && echo ".git" >> .clear-target-files
         
       - name: Push
         uses: s0/git-publish-subdir-action@develop
@@ -43,5 +43,5 @@ jobs:
         with:
           project-id: '${{ secrets.projectId }}'
           auth-token: '${{ secrets.authToken }}'
-          #path: 'teste' # optional
+          path: 'testebuild' # optional
           
