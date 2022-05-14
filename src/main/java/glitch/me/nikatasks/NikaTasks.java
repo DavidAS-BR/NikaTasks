@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/teste")
+@WebServlet("/hello")
 public class NikaTasks extends HttpServlet {
 
     @Override
