@@ -55,4 +55,4 @@ jobs:
         with:
           project-id: '${{ secrets.projectId }}'
           auth-token: '${{ secrets.authToken }}'
-          path: 'webapp' # optional
+          path: 'webappbuild' # optional
