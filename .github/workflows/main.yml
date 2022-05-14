@@ -41,16 +41,14 @@ jobs:
 #       - name: Inicializador do Glitch
 #         run: rand=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 11) && json='{"name":"NikaTasks","description":"Um projeto de ToDoList","version":"1.0.0","scripts":{"start":"bash build/output/NikaTasks/start.sh"},"repository":{"type":"git","url":"https://github.com/DavidAS-BR/NikaTasks.git"},"keywords":[],"author":"GrupoProjeto","license":"MIT","keywords":["$rand"],"bugs":{"url":"https://github.com/DavidAS-BR/NikaTasks/issues"},"homepage":"https://roomy-antique-gray.glitch.me"}' && echo "$json" >> webappbuild/package.json
       
-      - name: Push
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: main # The branch name where you want to push the assets
-          FOLDER: webappbuild # The directory where your assets are generated
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
-          MESSAGE: "Build: ({sha}) {msg} [ci-skip]" # The commit message
-          CLEAR_GLOBS_FILE: ".clear-target-files"
-          
+      - name: Commit report
+        run: |
+          git config --global user.name 'DavidAS-BR'
+          git config --global user.email 'DavidAS-BR@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "Teste [ci-skip]"
+          git push
+ 
       - name: Glitch-Deploy
         uses: kanadgupta/glitch-sync@v1.1
         with:
