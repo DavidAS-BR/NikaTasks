@@ -12,7 +12,7 @@ public class NikaTasks extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().print("Teste 123");
+        response.getWriter().print("Hello World!");
         System.out.println("Testando");
     }
 }
