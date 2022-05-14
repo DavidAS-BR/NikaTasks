@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew buildAllProducts
         
       - name: Montar Pastas
-        run: mkdir webappbuild && mv build webappbuild && echo "build/output/*" >> .clear-target-files
+        run: mkdir webappbuild && mv build webappbuild && echo "build/output/testando.txt" >> .clear-target-files
         
       - name: Push
         uses: s0/git-publish-subdir-action@develop
@@ -45,8 +45,8 @@ jobs:
           BRANCH: main # The branch name where you want to push the assets
           FOLDER: webappbuild # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
-          CLEAR_GLOBS_FILE: ".clear-target-files"
           MESSAGE: "Build: ({sha}) {msg} [ci-skip]" # The commit message
+          CLEAR_GLOBS_FILE: ".clear-target-files"
           
       - name: Glitch-Deploy
         uses: kanadgupta/glitch-sync@v1.1
