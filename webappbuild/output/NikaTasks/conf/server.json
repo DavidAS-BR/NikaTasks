@@ -10,7 +10,7 @@
     },
     "webApps": [
         {
-            "contextPath": "/NikaTasks",
+            "contextPath": "/",
             "resourceBase": "webapps/NikaTasks-1.0-SNAPSHOT.war"
         }
     ]
