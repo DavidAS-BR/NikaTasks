@@ -38,11 +38,11 @@ jobs:
         run: ./gradlew buildAllProducts
         
       - name: Montar Pastas
-        run: rm -rf webappbuild && mkdir webappbuild && mv build gradlebuild && mv gradlebuild webappbuild
+        run: rm -rf webappbuild && mkdir webappbuild && mv build/output webappbuild
         
       - name: Inicializador do Glitch
         run: |
-          rand=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 11) && json='{"name":"NikaTasks","description":"Um projeto de ToDoList","version":"1.0.0","scripts":{"start":"rm -rf build && mkdir build && mv gradlebuild build && bash build/gradlebuild/output/NikaTasks/start.sh"},"repository":{"type":"git","url":"https://github.com/DavidAS-BR/NikaTasks.git"},"keywords":[],"author":"GrupoProjeto","license":"MIT","keywords":["$rand"],"bugs":{"url":"https://github.com/DavidAS-BR/NikaTasks/issues"},"homepage":"https://roomy-antique-gray.glitch.me"}' && echo "$json" >> webappbuild/package.json
+          rand=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 11) && json='{"name":"NikaTasks","description":"Um projeto de ToDoList","version":"1.0.0","scripts":{"start":"rm -rf build && mkdir build && mv output build && bash build/output/NikaTasks/start.sh"},"repository":{"type":"git","url":"https://github.com/DavidAS-BR/NikaTasks.git"},"keywords":[],"author":"GrupoProjeto","license":"MIT","keywords":["$rand"],"bugs":{"url":"https://github.com/DavidAS-BR/NikaTasks/issues"},"homepage":"https://roomy-antique-gray.glitch.me"}' && echo "$json" >> webappbuild/package.json
       - name: Commit report
         run: |
           git config --global user.name 'DavidAS-BR'
