@@ -9,6 +9,7 @@ version '1.0-SNAPSHOT'
 gretty{
     servletContainer = 'tomcat9'
     httpPort = project.hasProperty("httpPort") ? project.httpPort as int : 8080
+    contextPath = ''
 }
 
 repositories {
@@ -17,6 +18,7 @@ repositories {
 
 dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.tuckey:urlrewritefilter:4.0.4'
 }
 
 task finalJar(type: Jar) {
