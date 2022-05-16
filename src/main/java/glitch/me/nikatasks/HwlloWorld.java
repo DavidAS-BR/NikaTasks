@@ -12,7 +12,16 @@ public class HwlloWorld extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().print("World!");
+        String nome = request.getParameter("nome");
+
+        response.getWriter().print("Olá!");
         System.out.println("Testando");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String nome = req.getParameter("nome");
+
+        resp.getWriter().print("Olá, " + nome + "!");
     }
 }
