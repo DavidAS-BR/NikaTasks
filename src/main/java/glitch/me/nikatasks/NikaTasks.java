@@ -13,6 +13,6 @@ public class NikaTasks extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/NikaTasks"));
-        System.out.println("Testando");
+        System.out.println("Testando")
     }
 }
