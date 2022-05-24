@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;
+}
+
+input[type=submit]{
+        background-color: white;
+        border-radius: 3px;
+        color: black;
+        padding: 5px 8px;
+        display: block;
+        margin: 0 auto;
+}
+
+input[type=email]{
+    border-radius: 4px;
+    background-color: white;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type=name]{
+    border-radius: 4px;
+
+    background-color: white;
+}
+
+input[type=password]{
+    border-radius: 4px;
+    background-color: white;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+input[type=submit]:hover{
+        background-color: black;
+        border-radius: 3px;
+        color: white;
+        padding: 5px 8px;
+        display: block;
+        margin: 0 auto;
+}
+
+h5{
+    text-align: center;
+}
+
+#left{
+    background-color: lightgray;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+#right{
+    background-color: lightgray;
+    color: black;
+    text-align: center;
+    border: 2px solid black;
+}
+
+#ldo {
+    background-color: lightgray;
+    border-radius: 3px;
+    text-align: center;
+    border: 2px solid black;
+}
+
+#dd{
+    text-align: center;
+}
+
+#header {
+    text-align: center;
+}
+
+#login-form {
+    margin: 0 auto;
+}
+
+#create-account {
+    text-align: center;
+}
+
+#passwordmatchingerror {
+    text-align: center;
+}

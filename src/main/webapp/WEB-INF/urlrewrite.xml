@@ -20,10 +20,10 @@ The outbound-rule specifies that when response.encodeURL is called (if you are u
 <from>/rewrite-status</from>
 <to>/test/status/</to>
 </outbound-rule>
-<rule>
-    <from>/hello</from>
-    <to>/world</to>
-</rule>
+<!-- <rule> -->
+<!--     <from>/hello</from> -->
+<!--     <to>/world</to> -->
+<!-- </rule> -->
 <!--
 
 
