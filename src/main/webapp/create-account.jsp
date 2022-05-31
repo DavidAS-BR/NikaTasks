@@ -1,7 +1,8 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.io.*,java.lang.*,java.util.*,java.net.*,java.util.*,java.text.*"%>
-<%@ page import="javax.activation.*"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="javax.activation.*"%>
 
 <!DOCTYPE html>
 <html lang="pt">
