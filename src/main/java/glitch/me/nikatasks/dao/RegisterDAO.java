@@ -12,7 +12,8 @@ import java.util.UUID;
 public class RegisterDAO {
     public String registrar(String usr, String email, String pwd) throws Exception {
         Connection conn = null;
-        PreparedStatement preparedStatement = null;
+        PreparedStatement checkAccountExistence = null;
+        PreparedStatement createAccountStatement = null;
         ResultSet rs = null;
 
         if (pwd.length() > 20) {
@@ -30,24 +31,24 @@ public class RegisterDAO {
         try {
             conn = Database.getConnection();
 
-            preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE user_name=(?) OR email=(?)");
-            preparedStatement.setString(1, usr);
-            preparedStatement.setString(2, email);
+            checkAccountExistence = conn.prepareStatement("SELECT * FROM users WHERE user_name=(?) OR email=(?)");
+            checkAccountExistence.setString(1, usr);
+            checkAccountExistence.setString(2, email);
 
-            rs = preparedStatement.executeQuery();
+            rs = checkAccountExistence.executeQuery();
 
             if (!rs.isBeforeFirst()) {
                 UUID userUUID = UUID.randomUUID();
 
                 String hashedPassword = BCrypt.hashpw(pwd, BCrypt.gensalt(12));
 
-                preparedStatement = conn.prepareStatement("INSERT INTO users (user_uuid, user_name, email, hashed_password) VALUES (?, ?, ?, ?)");
-                preparedStatement.setObject(1, userUUID);
-                preparedStatement.setString(2, usr);
-                preparedStatement.setString(3, email);
-                preparedStatement.setString(4, hashedPassword);
+                createAccountStatement = conn.prepareStatement("INSERT INTO users (user_uuid, user_name, email, hashed_password) VALUES (?, ?, ?, ?)");
+                createAccountStatement.setObject(1, userUUID);
+                createAccountStatement.setString(2, usr);
+                createAccountStatement.setString(3, email);
+                createAccountStatement.setString(4, hashedPassword);
 
-                preparedStatement.executeUpdate();
+                createAccountStatement.executeUpdate();
 
                 return "Conta criada com sucesso!";
             } else {
@@ -56,8 +57,15 @@ public class RegisterDAO {
 
         } finally {
             try {
-                if (preparedStatement != null)
-                    preparedStatement.close();
+                if (checkAccountExistence != null)
+                    checkAccountExistence.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            try {
+                if (createAccountStatement != null)
+                    createAccountStatement.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

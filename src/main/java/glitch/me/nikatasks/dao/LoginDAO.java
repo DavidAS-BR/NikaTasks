@@ -12,7 +12,10 @@ import java.util.UUID;
 public class LoginDAO {
     public String authenticate(String usr, String pwd) throws Exception {
         Connection conn = null;
-        PreparedStatement preparedStatement = null;
+        PreparedStatement getUserAndPass = null;
+        PreparedStatement getSessionInf = null;
+        PreparedStatement createNewSession = null;
+        PreparedStatement deleteSession = null;
         ResultSet rs = null;
 
         if (pwd.length() > 20) {
@@ -26,11 +29,11 @@ public class LoginDAO {
         try {
             conn = Database.getConnection();
 
-            preparedStatement = conn.prepareStatement("SELECT user_uuid, hashed_password FROM users WHERE email=(?) OR user_name=(?)");
-            preparedStatement.setString(1, usr);
-            preparedStatement.setString(2, usr);
+            getUserAndPass = conn.prepareStatement("SELECT user_uuid, hashed_password FROM users WHERE email=(?) OR user_name=(?)");
+            getUserAndPass.setString(1, usr);
+            getUserAndPass.setString(2, usr);
 
-            rs = preparedStatement.executeQuery();
+            rs = getUserAndPass.executeQuery();
 
             if (!rs.isBeforeFirst())
                 return null;
@@ -40,10 +43,10 @@ public class LoginDAO {
             if (BCrypt.checkpw(pwd, rs.getString(2))) {
                 UUID user_uuid = UUID.fromString(rs.getString(1));
 
-                preparedStatement = conn.prepareStatement("SELECT session_id, expires_At FROM sessions WHERE user_uuid=(?)");
-                preparedStatement.setObject(1, user_uuid);
+                getSessionInf = conn.prepareStatement("SELECT session_id, expires_At FROM sessions WHERE user_uuid=(?)");
+                getSessionInf.setObject(1, user_uuid);
 
-                rs = preparedStatement.executeQuery();
+                rs = getSessionInf.executeQuery();
 
                 if (rs.isBeforeFirst()) {
                     rs.next();
@@ -57,24 +60,24 @@ public class LoginDAO {
                     if (actualDate.before(expiresAtDate)) { // TODO: Deletar registro da sessão caso tenha expirado.
                         return rs.getString(1);
                     } else {
-                        preparedStatement = conn.prepareStatement("DELETE FROM sessions WHERE user_uuid=(?)");
-                        preparedStatement.setObject(1, user_uuid);
+                        deleteSession = conn.prepareStatement("DELETE FROM sessions WHERE user_uuid=(?)");
+                        deleteSession.setObject(1, user_uuid);
 
-                        preparedStatement.executeUpdate();
+                        deleteSession.executeUpdate();
                     }
                 }
 
                 System.out.println("Gerando nova sessão");
 
-                preparedStatement = conn.prepareStatement("INSERT INTO sessions (session_id, user_uuid, user_agent) VALUES (?, ?, ?)");
+                createNewSession = conn.prepareStatement("INSERT INTO sessions (session_id, user_uuid, user_agent) VALUES (?, ?, ?)");
 
                 String session_id = UUID.randomUUID().toString().replace("-", "");
 
-                preparedStatement.setString(1, session_id);
-                preparedStatement.setObject(2, user_uuid);
-                preparedStatement.setString(3, "CelularOuPC?");
+                createNewSession.setString(1, session_id);
+                createNewSession.setObject(2, user_uuid);
+                createNewSession.setString(3, "CelularOuPC?");
 
-                preparedStatement.executeUpdate();
+                createNewSession.executeUpdate();
 
                 return session_id;
 
@@ -83,9 +86,31 @@ public class LoginDAO {
             }
 
         } finally {
+
             try {
-                if (preparedStatement != null)
-                    preparedStatement.close();
+                if (getUserAndPass != null)
+                    getUserAndPass.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            try {
+                if (getSessionInf != null)
+                    getSessionInf.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            try {
+                if (createNewSession != null)
+                    createNewSession.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            try {
+                if (deleteSession != null)
+                    deleteSession.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
