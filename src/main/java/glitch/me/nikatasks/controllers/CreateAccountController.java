@@ -1,4 +1,6 @@
-package glitch.me.nikatasks.Controllers;
+package glitch.me.nikatasks.controllers;
+
+import glitch.me.nikatasks.dao.RegisterDAO;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -6,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/create-account")
@@ -19,6 +20,7 @@ public class CreateAccountController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         String passwordConfirm = req.getParameter("confirmpassword");
@@ -30,9 +32,16 @@ public class CreateAccountController extends HttpServlet {
             dispatcher.forward(req, resp);
         } else {
             try {
-                System.out.println("Cadastrar usuário no banco de dados");
+                RegisterDAO register = new RegisterDAO();
 
-                req.setAttribute("success", "Conta criada com sucesso!");
+                String registerResult = register.registrar(username, email, password);
+
+                if (registerResult.equals("Conta criada com sucesso!")) {
+                    req.setAttribute("success", "Conta criada com sucesso!");
+                } else {
+                    req.setAttribute("error", registerResult);
+                }
+
             } catch (Exception e) {
 
                 req.setAttribute("error", "Algum erro desconhecido ocorreu, tente novamente mais tarde!");

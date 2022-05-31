@@ -1,4 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.io.*,java.lang.*,java.util.*,java.net.*,java.util.*,java.text.*"%>
+<%@ page import="javax.activation.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -10,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="shortcut icon" href="N.png" type="image/x-icon" />
     <title>NikaTasks</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -18,10 +22,32 @@
         <br>
         <h6>Ajude a sua empresa a ir para frente.</h6>
     </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#header").click(function () {
+                console.log("Hello World!");
+                $.ajax({
+                    type: 'post',
+                    url: '/create-account',
+                    data: "username="+"1234"+"&email=" + 'teste@teste.com' + "&password="+'1234' + "&confirmpassword="+'1234',
+                    success: function (msg) {
+                        console.log("Success", msg);
+                        $("body").html(msg);
+                    }
+                })
+            })
+        })
+    </script>
+
     <div class="container-xxl col-9">
         <form action="create-account" id="left" method="post">
             <br>
             <h5>Cadastro</h5>
+            <div class="form-group col-8" id="login-form">
+                <label for="username">Usuario:</label>
+                <input class="form-control" name="username" placeholder="Digite seu nome de usuario" type="text">
+            </div>
             <div class="form-group col-8" id="login-form">
                 <label for="email">Email:</label>
                 <input class="form-control" name="email" placeholder="Digite seu e-mail" type="email">
