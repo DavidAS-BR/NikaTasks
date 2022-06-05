@@ -53,12 +53,13 @@
                     console.log("Form ajax")
                     $.ajax({
                         type: form.attr("method"),
-                        url: form.attr("action"),
+                        url: window.location.href + "/login",
                         data: form.serialize(),
 
                         success: function (data, status) {
                             // console.log("success "+data);
-                            top.location.href = "home"
+                            window.location.href = "home"
+
                         },
                         error: function (data, status, error) {
                             $("body").html(data.response);
