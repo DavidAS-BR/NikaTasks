@@ -36,7 +36,7 @@
             </div>
             <br>
             <div class="form-group col-8" id="login-form">
-                <label for="password">Senhaaaa:</label>
+                <label for="password">Senha:</label>
                 <input class="form-control" name="password" placeholder="Digite sua senha" type="password">
                 <small class="form-text text-muted" id="passwordinfo">Sua senha será criptografada no nosso banco de
                     dados!</small>

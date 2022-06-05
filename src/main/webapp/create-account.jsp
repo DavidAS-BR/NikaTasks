@@ -60,8 +60,8 @@
                     <input class="form-control" name="password" placeholder="Digite sua senha" type="password">
                 </div>
                 <div class="col">
-                    <label for="password">Repita sua senha:</label>
-                    <input class="form-control" name="confirmpassword" placeholder="Digite sua senha" type="password">
+                    <label for="password">Senha:</label>
+                    <input class="form-control" name="confirmpassword" placeholder="Digite a senha novamente" type="password">
                 </div>
             </div>
             <br>

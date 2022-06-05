@@ -1,0 +1,53 @@
+*{
+    box-sizing: border-box;
+
+}
+h2{
+    text-align: center;
+    background-color: lightgray;
+}
+button {
+    background-color: lightgray;
+    margin-top: 10px;
+
+}
+button:hover{
+    background-color: black;
+    color: lightgray;
+}
+input[type=submit]{
+    padding: 20px;
+    border-radius: 10px;
+    background-color: lightgray;
+    border: 1px solid black;
+    font-family: arial;
+    float: right;
+    margin-top: -100px;
+    position: relative;
+}
+input[type=submit]:hover{
+    padding: 20px;
+    margin-top: -100px;
+    border-radius: 10px;
+    background-color: black;
+    color: lightgray;
+    font-family: arial;
+}
+
+.custombtn {
+    width: 200px;
+    white-space: nowrap;
+    /*overflow: hidden;*/
+    overflow: auto;
+}
+
+.centerform {
+    margin: auto;
+    width: 60%;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.hideform {
+    display: none;
+}
