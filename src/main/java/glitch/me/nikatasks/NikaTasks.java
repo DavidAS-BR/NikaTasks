@@ -41,6 +41,7 @@ public class NikaTasks extends HttpServlet {
             }
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
+            response.addHeader("Access-Control-Allow-Origin", "*");
             dispatcher.forward(request, response);
         }
     }
