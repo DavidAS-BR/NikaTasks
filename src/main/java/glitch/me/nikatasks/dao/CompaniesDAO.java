@@ -247,8 +247,9 @@ public class CompaniesDAO {
         try {
             conn = Database.getConnection();
 
-            validateUser = conn.prepareStatement("SELECT companie_id FROM companie_members WHERE member_uuid=(SELECT user_uuid FROM sessions WHERE session_id=(?))");
+            validateUser = conn.prepareStatement("SELECT companie_id, companies.id FROM companie_members, companies WHERE (SELECT user_uuid FROM sessions WHERE session_id=(?)) IN (owner_uuid, member_uuid) AND (?) IN (companies.id, companie_id);");
             validateUser.setString(1, authtoken);
+            validateUser.setInt(2, companieID);
 
             rs = validateUser.executeQuery();
 
