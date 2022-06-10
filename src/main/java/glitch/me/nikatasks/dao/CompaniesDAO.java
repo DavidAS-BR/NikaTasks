@@ -110,6 +110,7 @@ public class CompaniesDAO {
         } finally {
             Database.handleCloseConnection(conn);
             Database.handleCloseConnection(toggleTask);
+            Database.handleCloseConnection(getUserUUID);
         }
     }
 
