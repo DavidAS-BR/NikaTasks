@@ -5,7 +5,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
 
@@ -26,5 +28,17 @@ public class Database {
 
     public static Connection getConnection() throws SQLException {
         return ds.getConnection();
+    }
+
+    public static void handleCloseConnection(Connection connection) {
+        try { connection.close(); } catch (Exception ignored) { }
+    }
+
+    public static void handleCloseConnection(PreparedStatement statement) {
+        try { statement.close(); } catch (Exception ignored) { }
+    }
+
+    public static void handleCloseConnection(Statement statement) {
+        try { statement.close(); } catch (Exception ignored) { }
     }
 }

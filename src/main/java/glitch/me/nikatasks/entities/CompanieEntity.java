@@ -31,10 +31,14 @@ public class CompanieEntity {
 
     public int getCompanieTotalTasks() {
         try {
-            return CompaniesDAO.getCompanieTasks(companieID);
+            return CompaniesDAO.getCompanieTasksQuant(companieID);
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    public String getRequesteerUUID() {
+        return requesteerUUID;
     }
 
     public String getCompanieName() {

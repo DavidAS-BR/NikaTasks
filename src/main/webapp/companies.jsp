@@ -25,7 +25,42 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col">
             <div class="card" id="list1" style="border-radius: .75rem; background-color: #eff1f2;">
-                <div class="card-body py-4 px-4 px-md-5">
+
+                <script>
+                    $(document).ready(function() {
+                        var pageRefresh = 5000; //5 s
+                        setInterval(function() {
+                            refresh();
+
+                        }, pageRefresh);
+                    });
+
+                    // Functions
+
+                    function refresh() {
+                        $('#taskList').load(location.href + " #taskList");
+                    }
+
+                    function updateTask(taskID) {
+
+                        $.ajax({
+                            type: 'POST',
+                            url: window.location.href+'&task='+taskID,
+
+                            success: function (data, status) {
+                                // console.log("success")
+                                refresh()
+                            },
+
+                            error: function (data, status, error) {
+                                console.log("error");
+                            }
+                        })
+                    }
+
+                </script>
+
+                <div id="taskList" class="card-body py-4 px-4 px-md-5">
 
                     <nav class="navbar navbar-light justify-content-betwee background-color: #eff1f2;">
                         <a class="navbar-brand"></a>
@@ -43,7 +78,7 @@
 
                     <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
                         <i class="fas fa-check-square me-1"></i>
-                        <u>Companie Name</u>
+                        <u>${requestScope.accesscompanie.companieName}</u>
                     </p>
 
                     <div class="pb-2">
@@ -62,67 +97,119 @@
 
                     <hr class="my-4">
 
-                    <ul class="list-group list-group-horizontal rounded-0 bg-transparent">
-                        <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-                            <div class="form-check">
-                                <input
-                                        class="form-check-input me-0"
-                                        type="checkbox"
-                                        value=""
-                                        id="flexCheckChecked1"
-                                        aria-label="..."
-                                        checked
-                                />
-                            </div>
-                        </li>
-                        <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-                            <p class="lead fw-normal mb-0">Buy groceries for next week</p>
-                        </li>
-                    </ul>
+                    <c:forEach items="${requestScope.accesscompanie.tasklist}" var="taskList">
+                        <c:if test="${not taskList.isTaskCompleted()}">
+                            <ul class="list-group list-group-horizontal rounded-0 mb-2">
+                                <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                                    <div class="form-check">
+                                        <input
+                                                class="form-check-input me-0"
+                                                type="checkbox"
+                                                value=""
+                                                id="flexCheckChecked3"
+                                                aria-label="..."
+                                                onclick="updateTask('${taskList.getTaskID()}')"
+                                        />
+                                    </div>
+                                </li>
+                                <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                                    <p class="lead fw-normal mb-0 bg-light w-100 ms-n2 ps-2 py-1 rounded">${taskList.getTaskDescription()}</p>
+                                </li>
+                            </ul>
+                        </c:if>
 
-                    <ul class="list-group list-group-horizontal rounded-0">
-                        <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-                            <div class="form-check">
-                                <input
-                                        class="form-check-input me-0"
-                                        type="checkbox"
-                                        value=""
-                                        id="flexCheckChecked2"
-                                        aria-label="..."
-                                />
-                            </div>
-                        </li>
-                        <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-                            <p class="lead fw-normal mb-0">Renew car insurance</p>
-                        </li>
-                        <li class="list-group-item px-2 py-1 d-flex align-items-center border-0 bg-transparent">
-                            <div class="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center bg-light">
-                                <p class="small mb-0">
-                                    <a href="#!" data-mdb-toggle="tooltip" title="Due on date">
-                                        <i class="fas fa-hourglass-half me-2 text-warning text-center"></i>
-                                    </a>
-                                    Feito por: David
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
+                        <c:if test="${taskList.isTaskCompleted()}">
+                            <ul class="list-group list-group-horizontal rounded-0">
+                                <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                                    <div class="form-check">
+                                        <input
+                                                class="form-check-input me-0"
+                                                type="checkbox"
+                                                value=""
+                                                id="flexCheckChecked2"
+                                                aria-label="..."
+                                                checked
+                                                onclick="updateTask('${taskList.getTaskID()}')"
+                                        />
+                                    </div>
+                                </li>
+                                <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                                    <p class="lead fw-normal mb-0">${taskList.getTaskDescription()}</p>
+                                </li>
+                                <li class="list-group-item px-2 py-1 d-flex align-items-center border-0 bg-transparent">
+                                    <div class="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center bg-light">
+                                        <p class="small mb-0">
+                                            <a href="#!" data-mdb-toggle="tooltip" title="Due on date">
+                                                <i class="fas fa-hourglass-half me-2 text-warning text-center"></i>
+                                            </a>
+                                            Feito por: ${taskList.getCompletedBy()}
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </c:if>
+                    </c:forEach>
+<%--                    <ul class="list-group list-group-horizontal rounded-0 bg-transparent">--%>
+<%--                        <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">--%>
+<%--                            <div class="form-check">--%>
+<%--                                <input--%>
+<%--                                        class="form-check-input me-0"--%>
+<%--                                        type="checkbox"--%>
+<%--                                        value=""--%>
+<%--                                        id="flexCheckChecked1"--%>
+<%--                                        aria-label="..."--%>
+<%--                                        checked--%>
+<%--                                />--%>
+<%--                            </div>--%>
+<%--                        </li>--%>
+<%--                        <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">--%>
+<%--                            <p class="lead fw-normal mb-0">Buy groceries for next week</p>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
 
-                    <ul class="list-group list-group-horizontal rounded-0 mb-2">
-                        <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
-                            <div class="form-check">
-                                <input
-                                        class="form-check-input me-0"
-                                        type="checkbox"
-                                        value=""
-                                        id="flexCheckChecked3"
-                                        aria-label="..."
-                                />
-                            </div>
-                        </li>
-                        <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-                            <p class="lead fw-normal mb-0 bg-light w-100 ms-n2 ps-2 py-1 rounded">Sign up for online course</p>
-                        </li>
-                    </ul>
+<%--                    <ul class="list-group list-group-horizontal rounded-0">--%>
+<%--                        <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">--%>
+<%--                            <div class="form-check">--%>
+<%--                                <input--%>
+<%--                                        class="form-check-input me-0"--%>
+<%--                                        type="checkbox"--%>
+<%--                                        value=""--%>
+<%--                                        id="flexCheckChecked2"--%>
+<%--                                        aria-label="..."--%>
+<%--                                />--%>
+<%--                            </div>--%>
+<%--                        </li>--%>
+<%--                        <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">--%>
+<%--                            <p class="lead fw-normal mb-0">Renew car insurance</p>--%>
+<%--                        </li>--%>
+<%--                        <li class="list-group-item px-2 py-1 d-flex align-items-center border-0 bg-transparent">--%>
+<%--                            <div class="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center bg-light">--%>
+<%--                                <p class="small mb-0">--%>
+<%--                                    <a href="#!" data-mdb-toggle="tooltip" title="Due on date">--%>
+<%--                                        <i class="fas fa-hourglass-half me-2 text-warning text-center"></i>--%>
+<%--                                    </a>--%>
+<%--                                    Feito por: David--%>
+<%--                                </p>--%>
+<%--                            </div>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
+
+<%--                    <ul class="list-group list-group-horizontal rounded-0 mb-2">--%>
+<%--                        <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">--%>
+<%--                            <div class="form-check">--%>
+<%--                                <input--%>
+<%--                                        class="form-check-input me-0"--%>
+<%--                                        type="checkbox"--%>
+<%--                                        value=""--%>
+<%--                                        id="flexCheckChecked3"--%>
+<%--                                        aria-label="..."--%>
+<%--                                />--%>
+<%--                            </div>--%>
+<%--                        </li>--%>
+<%--                        <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">--%>
+<%--                            <p class="lead fw-normal mb-0 bg-light w-100 ms-n2 ps-2 py-1 rounded">Sign up for online course</p>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
 
                 </div>
             </div>
