@@ -17,8 +17,10 @@ public class CompanieAccessEntity extends CompanieEntity{
 
     public List<TaskEntity> getTasklist() {
         try {
+            System.out.println("Pegando lista de tasks");
             return CompaniesDAO.getTaskList(this.getCompanieID());
         } catch (Exception ignored) {
+            System.out.println(ignored);
             return null;
         }
     }
