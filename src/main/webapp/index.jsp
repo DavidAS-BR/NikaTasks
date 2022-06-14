@@ -96,6 +96,12 @@
         <p>Use o NikaTasks, a gente ajudará a gerenciar as suas tarefas para tornar sua empresa uma das melhores do
             mundo.</p>
     </div>
+
+    <footer>
+        <div class="text-center">
+            <img alt="footer" src="https://media.discordapp.net/attachments/772492015643656233/985973914394050670/SUN_LOGO.png?width=200&height=200" alt="..." class="logo">
+        </div>
+    </footer>
     <!--<footer id="footer">Sun Desk Desenvolvimento de Software, 2022.</footer>-->
 </div>
 </body>

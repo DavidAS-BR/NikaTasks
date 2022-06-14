@@ -105,3 +105,11 @@ h5{
     background: url('//upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Phi_fenomeni.gif/50px-Phi_fenomeni.gif')
     50% 50% no-repeat rgb(249,249,249);
 }
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10%;
+}

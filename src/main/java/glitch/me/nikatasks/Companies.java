@@ -39,6 +39,7 @@ public class Companies extends HttpServlet {
                     req.setAttribute("accesscompanie", companie);
                 }
             } catch (Exception e) {
+                System.out.println(e);
                 resp.setStatus(401);
             }
 
@@ -47,37 +48,130 @@ public class Companies extends HttpServlet {
         }
     }
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String usertoken = (String) req.getSession().getAttribute("authtoken");
-        int companieID = Integer.parseInt(req.getParameter("id"));
-        int taskID = Integer.parseInt(req.getParameter("task"));
 
-        System.out.println("Toggle Task");
-        try {
-            System.out.println(usertoken);
-            System.out.println(companieID);
-            System.out.println(taskID);
+        if (req.getParameter("id") == null) {
+            resp.setStatus(404);
 
-            boolean updateTaskStatus = CompaniesDAO.toggleTaskStatus(companieID, taskID, usertoken);
-
-            System.out.println("Query resolt " + updateTaskStatus);
-            if (updateTaskStatus) {
-                resp.setStatus(200);
-            } else {
-                resp.setStatus(401);
-
-                System.out.println("Query error");
-
-                RequestDispatcher dispatcher = req.getRequestDispatcher("companies.jsp");
-                dispatcher.forward(req, resp);
-            }
-
-        } catch (Exception e) {
-            resp.setStatus(401);
-            System.out.println("Exception error");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
             dispatcher.forward(req, resp);
         }
+
+        int companieID = Integer.parseInt(req.getParameter("id"));
+
+        if (req.getParameter("task") != null && req.getParameter("action") != null) {
+            int taskID = Integer.parseInt(req.getParameter("task"));
+
+            String action = req.getParameter("action");
+
+            try {
+
+                if (action.equals("update")) {
+                    boolean updateTaskStatus = CompaniesDAO.toggleTaskStatus(companieID, taskID, usertoken);
+
+                    System.out.println("Query result " + updateTaskStatus);
+                    if (updateTaskStatus) {
+                        resp.setStatus(200);
+                    } else {
+                        resp.setStatus(401);
+
+                        System.out.println("Query error - 2");
+
+                        RequestDispatcher dispatcher = req.getRequestDispatcher("companies.jsp");
+                        dispatcher.forward(req, resp);
+                    }
+                }
+
+                if (action.equals("delete")) {
+                    boolean deleteTaskStatus = CompaniesDAO.deleteTask(companieID, taskID); // TODO: Validate with usertoken
+
+                    System.out.println("Query result " + deleteTaskStatus);
+                    if (deleteTaskStatus) {
+                        resp.setStatus(200);
+                    } else {
+                        resp.setStatus(401);
+
+                        System.out.println("Query error - 4");
+
+                        RequestDispatcher dispatcher = req.getRequestDispatcher("companies.jsp");
+                        dispatcher.forward(req, resp);
+                    }
+                }
+            } catch (Exception e) {
+                resp.setStatus(401);
+                System.out.println("Exception 1");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
+                dispatcher.forward(req, resp);
+            }
+        }
+
+        if (req.getParameter("taskdescription") != null && req.getParameter("action") == null) {
+            String taskDescription = req.getParameter("taskdescription");
+
+            try {
+
+                boolean addTaskResult = false;
+
+                if (taskDescription.length() > 0 && taskDescription.length() < 250) {
+                    addTaskResult = CompaniesDAO.addTask(companieID, taskDescription);
+                }
+
+                if (addTaskResult) {
+                    resp.setStatus(200);
+                } else {
+                    resp.setStatus(401);
+
+                    System.out.println("Query error - 4");
+
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("companies.jsp");
+                    dispatcher.forward(req, resp);
+                }
+
+            } catch (Exception ignored) {
+                resp.setStatus(401);
+                System.out.println("Exception 2");
+                RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
+                dispatcher.forward(req, resp);
+            }
+        }
+
+        if (req.getParameter("adduserform") != null && req.getParameter("action") != null) {
+            String action = req.getParameter("action");
+
+            System.out.println("Adicionando usuário");
+
+            String memberName = req.getParameter("adduserform");
+
+            System.out.println("Nome: " + memberName);
+            if (action.equals("add")) {
+
+                System.out.println("Adding member");
+
+                try {
+                    boolean addMemberResult = CompaniesDAO.addMember(companieID, memberName);
+
+                    if (addMemberResult) {
+                        resp.setStatus(200);
+                    } else {
+                        resp.setStatus(401);
+
+                        System.out.println("Query error - 1");
+
+                        RequestDispatcher dispatcher = req.getRequestDispatcher("companies.jsp");
+                        dispatcher.forward(req, resp);
+                    }
+                } catch (Exception ignored) {
+                    resp.setStatus(401);
+                    System.out.println("Exception 3"+ignored);
+                    RequestDispatcher dispatcher = req.getRequestDispatcher("home.jsp");
+                    dispatcher.forward(req, resp);
+                }
+            }
+        }
+
+        System.out.println("Toggle Task");
     }
 }

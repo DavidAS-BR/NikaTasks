@@ -58,7 +58,7 @@ public class CompaniesDAO {
         }
     }
 
-    public static boolean toggleTaskStatus(int companieID, int taskID, String userSessionID) throws Exception{
+    public static boolean toggleTaskStatus(int companieID, int taskID, String userSessionID) throws Exception {
         Connection conn = null;
         PreparedStatement actualTaskStatus = null;
         PreparedStatement toggleTask = null;
@@ -111,6 +111,103 @@ public class CompaniesDAO {
             Database.handleCloseConnection(conn);
             Database.handleCloseConnection(toggleTask);
             Database.handleCloseConnection(getUserUUID);
+        }
+    }
+
+    public static boolean addTask (int companieID, String taskDescription) throws Exception {
+        Connection conn = null;
+        PreparedStatement addTask = null;
+
+        try {
+            conn = Database.getConnection();
+
+            addTask = conn.prepareStatement("INSERT INTO companie_tasks (companie_id, description) VALUES (?, ?);");
+            addTask.setInt(1, companieID);
+            addTask.setString(2, taskDescription);
+
+            int result = addTask.executeUpdate();
+
+            return result > 0;
+
+        } finally {
+            Database.handleCloseConnection(conn);
+            Database.handleCloseConnection(addTask);
+        }
+    }
+
+    public static boolean deleteTask (int companieID, int taskID) throws Exception {
+        Connection conn = null;
+        PreparedStatement deleteTask = null;
+
+        try {
+            conn = Database.getConnection();
+
+            deleteTask = conn.prepareStatement("DELETE FROM companie_tasks WHERE id=(?) AND companie_id=(?);");
+            deleteTask.setInt(1, taskID);
+            deleteTask.setInt(2, companieID);
+
+            int result = deleteTask.executeUpdate();
+
+            return result > 0;
+
+        } finally {
+            Database.handleCloseConnection(conn);
+            Database.handleCloseConnection(deleteTask);
+        }
+    }
+
+    public static boolean addMember(int companieID, String username) throws Exception {
+        Connection conn = null;
+        PreparedStatement getUserUUID = null;
+        PreparedStatement companieAddMember = null;
+        PreparedStatement checkMemberExistence = null;
+        ResultSet rs = null;
+
+        try {
+            conn = Database.getConnection();
+            getUserUUID = conn.prepareStatement("SELECT user_uuid FROM users WHERE email=(?) OR user_name=(?)");
+            getUserUUID.setString(1, username);
+            getUserUUID.setString(2, username);
+
+            System.out.println(username);
+
+            rs = getUserUUID.executeQuery();
+
+            if (!rs.isBeforeFirst()){
+                System.out.println("Usuário não existe");
+                return false;
+            }
+
+            rs.next();
+
+            UUID userUUID = UUID.fromString(rs.getString(1));
+
+            checkMemberExistence = conn.prepareStatement("SELECT id FROM companie_members WHERE companie_id=(?) AND member_uuid=(?);");
+            checkMemberExistence.setInt(1, companieID);
+            checkMemberExistence.setObject(2, userUUID);
+
+            rs.close();
+
+            rs = checkMemberExistence.executeQuery();
+
+            if (rs.isBeforeFirst()) {
+                System.out.println("Usuário já existe!");
+                return false;
+            }
+
+            companieAddMember = conn.prepareStatement("INSERT INTO companie_members (companie_id, member_uuid) VALUES (?, ?)");
+            companieAddMember.setInt(1, companieID);
+            companieAddMember.setObject(2, userUUID);
+
+            int result = companieAddMember.executeUpdate();
+
+            return result > 0;
+
+        } finally {
+            Database.handleCloseConnection(conn);
+            Database.handleCloseConnection(getUserUUID);
+            Database.handleCloseConnection(companieAddMember);
+            Database.handleCloseConnection(checkMemberExistence);
         }
     }
 
@@ -171,7 +268,9 @@ public class CompaniesDAO {
     public static List<TaskEntity> getTaskList(int companieID) throws Exception {
         Connection conn = null;
         PreparedStatement getCompanieTasks = null;
+        PreparedStatement getUserNameByUUID = null;
         ResultSet rs = null;
+        ResultSet completedByRS = null;
 
         try {
             conn = Database.getConnection();
@@ -187,9 +286,17 @@ public class CompaniesDAO {
                 int taskID = rs.getInt(1);
                 String taskDesc = rs.getString(3);
                 boolean taskStatus = (rs.getString(4).equals("U")) ? false : true;
-                String completedBy = rs.getString(5);
+                UUID completedBy = UUID.fromString(rs.getString(5));
 
-                TaskEntity task = new TaskEntity(taskID, taskStatus, taskDesc, completedBy);
+                getUserNameByUUID = conn.prepareStatement("SELECT user_name FROM users WHERE user_uuid=(?)");
+                getUserNameByUUID.setObject(1, completedBy);
+
+                completedByRS = getUserNameByUUID.executeQuery();
+                completedByRS.next();
+
+                TaskEntity task = new TaskEntity(taskID, taskStatus, taskDesc, completedByRS.getString(1));
+
+                completedByRS.close();
 
                 taskList.add(task);
             }
@@ -200,6 +307,7 @@ public class CompaniesDAO {
 
         } finally {
             Database.handleCloseConnection(getCompanieTasks);
+            Database.handleCloseConnection(getUserNameByUUID);
             Database.handleCloseConnection(conn);
         }
     }
@@ -247,15 +355,17 @@ public class CompaniesDAO {
         try {
             conn = Database.getConnection();
 
-            validateUser = conn.prepareStatement("SELECT companie_id, companies.id FROM companie_members, companies WHERE companie_id=(?) OR companies.id=(?) AND (SELECT user_uuid FROM sessions WHERE session_id=(?)) IN (owner_uuid, member_uuid);");
-            validateUser.setInt(1, companieID);
+            validateUser = conn.prepareStatement("SELECT * FROM companies LEFT JOIN companie_members ON companies.id=companie_members.companie_id WHERE (SELECT user_uuid FROM sessions WHERE session_id=(?)) IN (owner_uuid, member_uuid) AND companies.id=(?) OR companie_members.companie_id=(?)");
+            validateUser.setString(1, authtoken);
             validateUser.setInt(2, companieID);
-            validateUser.setString(3, authtoken);
+            validateUser.setInt(3, companieID);
 
             rs = validateUser.executeQuery();
 
-            if (!rs.isBeforeFirst())
+            if (!rs.isBeforeFirst()) {
+                System.out.println("Member can not access this companie!");
                 return null;
+            }
 
             rs.close();
 

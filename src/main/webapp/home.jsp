@@ -1,4 +1,5 @@
 <%@ page import="java.io.*,java.lang.*,java.util.*,java.net.*,java.util.*,java.text.*"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
@@ -28,6 +29,12 @@
             </button>
         </c:if>
     </c:forEach>
+
+    <c:if test="${fn:length(requestScope.userCompanies) == 0}">
+        <button class="custombtn"><h4>Olá, Bem vindo!</h4>
+            <p>Crie sua empresa no</p><p>botão ao lado!</p>
+        </button>
+    </c:if>
     <br>
     <input id="createcompanie" type="submit" name="" value="Criar">
 
