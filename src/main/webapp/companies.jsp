@@ -117,15 +117,6 @@
             }
         })
     })
-
-    $("#addMemberForm").on("hidden.bs.modal", function () {
-        console.log("modal hidden")
-    });
-
-    $("#addMemberForm").on("hide.bs.modal", function () {
-        console.log("modal hide")
-    });
-
 </script>
 
 <section id="main" class="vh-0">
@@ -236,7 +227,7 @@
                                     <input name="taskdescription" type="text" class="form-control form-control-lg" id="exampleFormControlInput1" placeholder="Adicionar tarefa...">
                                     <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></a>
                                     <div>
-                                        <button type="submit" class="btn btn-primary" onclick="addTask()">Adicionar</button>
+                                        <button type="submit" class="btn btn-primary">Adicionar</button>
                                     </div>
                                 </form>
                             </div>
