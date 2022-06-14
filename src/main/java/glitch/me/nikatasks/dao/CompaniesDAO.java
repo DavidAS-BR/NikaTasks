@@ -268,9 +268,7 @@ public class CompaniesDAO {
     public static List<TaskEntity> getTaskList(int companieID) throws Exception {
         Connection conn = null;
         PreparedStatement getCompanieTasks = null;
-        PreparedStatement getUserNameByUUID = null;
         ResultSet rs = null;
-        ResultSet completedByRS = null;
 
         try {
             conn = Database.getConnection();
@@ -288,15 +286,7 @@ public class CompaniesDAO {
                 boolean taskStatus = (rs.getString(4).equals("U")) ? false : true;
                 UUID completedBy = UUID.fromString(rs.getString(5));
 
-                getUserNameByUUID = conn.prepareStatement("SELECT user_name FROM users WHERE user_uuid=(?)");
-                getUserNameByUUID.setObject(1, completedBy);
-
-                completedByRS = getUserNameByUUID.executeQuery();
-                completedByRS.next();
-
-                TaskEntity task = new TaskEntity(taskID, taskStatus, taskDesc, completedByRS.getString(1));
-
-                completedByRS.close();
+                TaskEntity task = new TaskEntity(taskID, taskStatus, taskDesc, completedBy.toString());
 
                 taskList.add(task);
             }
@@ -307,7 +297,6 @@ public class CompaniesDAO {
 
         } finally {
             Database.handleCloseConnection(getCompanieTasks);
-            Database.handleCloseConnection(getUserNameByUUID);
             Database.handleCloseConnection(conn);
         }
     }
