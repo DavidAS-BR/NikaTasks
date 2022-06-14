@@ -284,9 +284,9 @@ public class CompaniesDAO {
                 int taskID = rs.getInt(1);
                 String taskDesc = rs.getString(3);
                 boolean taskStatus = (rs.getString(4).equals("U")) ? false : true;
-                UUID completedBy = UUID.fromString(rs.getString(5));
+                String completedBy = rs.getString(5);
 
-                TaskEntity task = new TaskEntity(taskID, taskStatus, taskDesc, completedBy.toString());
+                TaskEntity task = new TaskEntity(taskID, taskStatus, taskDesc, completedBy);
 
                 taskList.add(task);
             }
