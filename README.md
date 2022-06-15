@@ -1,4 +1,10 @@
+![status](https://github.com/DavidAS-BR/NikaTasks/actions/workflows/main.yml/badge.svg)
+![license](https://img.shields.io/github/license/DavidAS-BR/NikaTasks)
+![issues](https://img.shields.io/github/issues/DavidAS-BR/NikaTasks)
+![wow](https://img.shields.io/static/v1?label=Olá&message=àlO&color=red)
+
 # NikaTasks
+
 Um simples site de todo-list desenvolvido em Java utilizando Servlets, Tomcat, Gradle, BD, ...
 
 # Rodando o site localmente
