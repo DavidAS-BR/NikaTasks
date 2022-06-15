@@ -1,6 +1,6 @@
 # Utilizando o GitHub Actions para fazer o deploy automaticamente no Glitch
 
-name: CI
+name: build
 
 # Controls when the workflow will run
 on:
