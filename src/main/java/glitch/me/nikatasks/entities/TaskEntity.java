@@ -1,6 +1,9 @@
 package glitch.me.nikatasks.entities;
 
 import glitch.me.nikatasks.dao.CompaniesDAO;
+import glitch.me.nikatasks.network.Database;
+
+import java.util.UUID;
 
 public class TaskEntity {
     private final int taskID;
@@ -28,6 +31,10 @@ public class TaskEntity {
     }
 
     public String getCompletedBy() {
-        return this.completedBy;
+        try {
+            return CompaniesDAO.getUserNameFromUUID(UUID.fromString(this.completedBy));
+        } catch (Exception ignored) {
+            return "NULL";
+        }
     }
 }

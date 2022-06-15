@@ -265,6 +265,29 @@ public class CompaniesDAO {
         }
     }
 
+    public static String getUserNameFromUUID(UUID userUUID) throws Exception {
+        Connection conn = null;
+        PreparedStatement getUserName = null;
+        ResultSet rs = null;
+
+        try {
+            conn = Database.getConnection();
+
+            getUserName = conn.prepareStatement("SELECT user_name FROM users WHERE user_uuid=(?)");
+            getUserName.setObject(1, userUUID);
+
+            rs = getUserName.executeQuery();
+
+            rs.next();
+
+            return rs.getString(1);
+
+        } finally {
+            Database.handleCloseConnection(getUserName);
+            Database.handleCloseConnection(conn);
+        }
+    }
+
     public static List<TaskEntity> getTaskList(int companieID) throws Exception {
         Connection conn = null;
         PreparedStatement getCompanieTasks = null;
@@ -311,7 +334,7 @@ public class CompaniesDAO {
 
             List<Map<UUID, String>> memberList = new ArrayList<>();
 
-            getCompanieMembers = conn.prepareStatement("SELECT member_uuid, user_name FROM companie_members, users WHERE companie_id=(?)");
+            getCompanieMembers = conn.prepareStatement("SELECT user_uuid, user_name FROM users WHERE user_uuid IN (SELECT member_uuid FROM companie_members WHERE companie_id=(?))");
             getCompanieMembers.setInt(1, companieID);
 
             rs = getCompanieMembers.executeQuery();
