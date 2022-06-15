@@ -19,3 +19,5 @@ Um simples site de todo-list desenvolvido em Java utilizando Servlets, Tomcat, G
   > git clone https://github.com/DavidAS-BR/NikaTasks \
   > cd NikaTasks\
   > ./gradlew appRun
+
+![Imgur Image](https://i.imgur.com/YYE7vAd.mp4)
